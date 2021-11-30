@@ -84,7 +84,7 @@
       let army = {
         name: params._id,
         details: armyFile,
-        image: '/images/armies/' + params._id + '.png'
+        image: '/images/armies/' + params._id.toLowerCase() + '.png'
       };
       return army;
     }
@@ -858,7 +858,7 @@
   });
   _exports.default = void 0;
 
-  var _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+  var _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -879,11 +879,20 @@
       _initializerDefineProperty(this, "armyList", _descriptor3, this);
 
       _initializerDefineProperty(this, "selectedUnit", _descriptor4, this);
+
+      _initializerDefineProperty(this, "canAddUnit", _descriptor5, this);
     }
 
-    get selectedUnit() {
-      let test = document.getElementById("unitSelect").value;
-      return test;
+    unitCostCheck() {
+      let bool = false;
+      this.model.details.units.forEach(unit => {
+        if (unit.cost <= this.points.remaining) {
+          bool = true;
+        }
+      });
+      ;
+      console.log("cost check");
+      (0, _object.set)(this, "canAddUnit", bool);
     }
 
     toggleAddUnit() {
@@ -896,10 +905,20 @@
 
     addUnit(unit) {
       this.armyList.pushObject(unit);
+      (0, _object.set)(this.points, "remaining", this.points.remaining - unit.cost);
       (0, _object.set)(this, "selectedUnit", null);
+      this.unitCostCheck();
     }
 
-    cancelAddUnit(unit) {
+    removeUnit(unit) {
+      let index = this.armyList.findIndex(armyUnit => armyUnit === unit);
+      let modifiedArmyList = this.armyList.removeAt(index);
+      (0, _object.set)(this, "armyList", modifiedArmyList);
+      (0, _object.set)(this.points, "remaining", this.points.remaining + unit.cost);
+      this.unitCostCheck();
+    }
+
+    cancelAddUnit() {
       (0, _object.set)(this, "selectedUnit", null);
     }
 
@@ -934,7 +953,14 @@
     initializer: function () {
       return null;
     }
-  }), _applyDecoratedDescriptor(_class.prototype, "toggleAddUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "toggleAddUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "setSelectedUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "setSelectedUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "addUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "addUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "cancelAddUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "cancelAddUnit"), _class.prototype)), _class);
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "canAddUnit", [_tracking.tracked], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return true;
+    }
+  }), _applyDecoratedDescriptor(_class.prototype, "toggleAddUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "toggleAddUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "setSelectedUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "setSelectedUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "addUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "addUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "cancelAddUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "cancelAddUnit"), _class.prototype)), _class);
   _exports.default = PointCalculatorController;
 });
 ;define("army-builder/point-calculator/route", ["exports", "@ember/routing/route"], function (_exports, _route) {
@@ -972,8 +998,8 @@
   _exports.default = void 0;
 
   var _default = (0, _templateFactory.createTemplateFactory)({
-    "id": "MKQyeVtC",
-    "block": "[[[1,[28,[35,0],[\"PointCalculator\"],null]],[1,\"\\n\"],[10,0],[14,0,\"container text-center\"],[12],[1,\"\\n    \"],[10,\"h1\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"total\"]]],[1,\" Points Total\"],[13],[1,\"\\n    \"],[10,\"h3\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"remaining\"]]],[1,\" Points Remaining\"],[13],[1,\"\\n    \"],[10,\"button\"],[14,0,\"btn primary-background primary-text\"],[14,\"data-bs-toggle\",\"modal\"],[14,\"data-bs-target\",\"#addUnitModal\"],[14,4,\"button\"],[12],[1,\"\\n        Add New Unit\\n    \"],[13],[1,\"\\n\\n    \"],[10,0],[14,0,\"modal fade\"],[14,1,\"addUnitModal\"],[14,\"tabindex\",\"-1\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-dialog \"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n                \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                    \"],[10,\"h5\"],[14,0,\"modal-title\"],[14,1,\"exampleModalLabel\"],[12],[1,\"Add Unit\"],[13],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                    \"],[10,0],[14,0,\"btn-group\"],[14,\"role\",\"group\"],[12],[1,\"\\n\"],[41,[30,0,[\"selectedUnit\"]],[[[1,\"                        \"],[10,0],[14,0,\"primary-text\"],[12],[1,[30,0,[\"selectedUnit\",\"name\"]]],[13],[1,\"\\n\"]],[]],[[[1,\"                        \"],[10,\"button\"],[14,0,\"btn dropdown-toggle secondary-background primary-text\"],[14,\"data-bs-toggle\",\"dropdown\"],[14,4,\"button\"],[12],[1,\"\\n                            Select Unit to add\\n                        \"],[13],[1,\"\\n                        \"],[10,\"ul\"],[14,0,\"dropdown-menu primary-background\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"model\",\"details\",\"units\"]]],null]],null],null,[[[1,\"                            \"],[10,\"li\"],[12],[11,3],[24,0,\"dropdown-item primary-text\"],[24,5,\"cursor: pointer;\"],[4,[38,4],[\"click\",[28,[37,5],[[30,0,[\"setSelectedUnit\"]],[30,1]],null]],null],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n                            \"],[13],[1,\"\\n\"]],[1]],null],[1,\"                        \"],[13],[1,\"\\n\"]],[]]],[1,\"                    \"],[13],[1,\"\\n\"],[1,\"                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                    \"],[11,\"button\"],[24,0,\"btn btn-secondary primary-text\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,4],[\"click\",[28,[37,5],[[30,0,[\"cancelAddUnit\"]]],null]],null],[12],[1,\"Cancel\"],[13],[1,\"\\n                    \"],[11,\"button\"],[24,0,\"btn secondary-background primary-text\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,4],[\"click\",[28,[37,5],[[30,0,[\"addUnit\"]],[30,0,[\"selectedUnit\"]]],null]],null],[12],[1,\"Add Unit to Army\"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\\n\\n\"],[1,\"    \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-xs-12 \"],[14,5,\"margin-top:20px\"],[12],[1,\"\\n        \"],[10,\"thead\"],[12],[1,\"\\n            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Upgrades\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"armyList\"]]],null]],null],null,[[[1,\"            \"],[10,\"tr\"],[12],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"name\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"size\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"quality\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"defense\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,2,[\"equipment\"]]],null]],null],null,[[[10,0],[12],[1,[30,3]],[13]],[3]],null],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,2,[\"specialRules\"]]],null]],null],null,[[[1,\"                    \"],[10,1],[12],[1,[30,4]],[41,[51,[28,[37,7],[[30,4],[30,2,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\", \"]],[]],null],[13],[1,\"\\n\"]],[4]],null],[1,\"                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[41,[28,[37,8],[[30,2,[\"upgrades\",\"length\"]],0],null],[[[42,[28,[37,3],[[28,[37,3],[[30,2,[\"upgrades\"]]],null]],null],null,[[[1,\"                    \"],[10,1],[12],[1,[30,5]],[41,[51,[28,[37,7],[[30,5],[30,2,[\"upgrades\",\"lastObject\"]]],null]],[[[1,\", \"]],[]],null],[13],[1,\"\\n\"]],[5]],null]],[]],[[[1,\"                    \"],[10,1],[12],[1,\"-\"],[13],[1,\"\\n\"]],[]]],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n            \"],[13],[1,\"\\n\"]],[2]],null],[1,\"        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13]],[\"unit\",\"unit\",\"equip\",\"specialRule\",\"upgrade\"],false,[\"page-title\",\"if\",\"each\",\"-track-array\",\"on\",\"fn\",\"unless\",\"eq\",\"gt\"]]",
+    "id": "oWtFXssp",
+    "block": "[[[1,[28,[35,0],[\"PointCalculator\"],null]],[1,\"\\n\"],[10,0],[14,0,\"container text-center\"],[12],[1,\"\\n    \"],[10,\"h1\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"total\"]]],[1,\" Points Total\"],[13],[1,\"\\n    \"],[10,\"h3\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"remaining\"]]],[1,\" Points Remaining\"],[13],[1,\"\\n\"],[41,[30,0,[\"canAddUnit\"]],[[[1,\"    \"],[10,\"button\"],[14,0,\"btn primary-background primary-text\"],[14,\"data-bs-toggle\",\"modal\"],[14,\"data-bs-target\",\"#addUnitModal\"],[14,4,\"button\"],[12],[1,\"\\n        Add New Unit\\n    \"],[13],[1,\"\\n\"]],[]],null],[1,\"\\n    \"],[10,0],[14,0,\"modal fade\"],[14,1,\"addUnitModal\"],[14,\"tabindex\",\"-1\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-dialog \"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n                \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                    \"],[10,\"h5\"],[14,0,\"modal-title\"],[14,1,\"exampleModalLabel\"],[12],[1,\"Add Unit\"],[13],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                    \"],[10,0],[14,0,\"btn-group\"],[14,\"role\",\"group\"],[12],[1,\"\\n                        \"],[10,\"button\"],[14,0,\"btn dropdown-toggle secondary-background primary-text\"],[14,\"data-bs-toggle\",\"dropdown\"],[14,4,\"button\"],[12],[1,\"\\n\"],[41,[30,0,[\"selectedUnit\"]],[[[1,\"                            \"],[1,[30,0,[\"selectedUnit\",\"name\"]]],[1,\" \"],[1,[30,0,[\"selectedUnit\",\"cost\"]]],[1,\" Pts\\n\"]],[]],[[[1,\"                            Select Unit to add\\n\"]],[]]],[1,\"                        \"],[13],[1,\"\\n                        \"],[10,\"ul\"],[14,0,\"dropdown-menu primary-background\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"model\",\"details\",\"units\"]]],null]],null],null,[[[41,[28,[37,4],[[30,1,[\"cost\"]],[30,0,[\"points\",\"remaining\"]]],null],[[[1,\"                            \"],[10,\"li\"],[12],[11,3],[16,0,[29,[\"dropdown-item primary-text \",[52,[28,[37,5],[[30,0,[\"selectedUnit\",\"name\"]],[30,1,[\"name\"]]],null],\"\\r\\n                                    active\"]]]],[24,5,\"cursor: pointer;\"],[4,[38,6],[\"click\",[28,[37,7],[[30,0,[\"setSelectedUnit\"]],[30,1]],null]],null],[12],[1,[30,1,[\"name\"]]],[1,\" \"],[1,[30,1,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n                            \"],[13],[1,\"\\n\"]],[]],null]],[1]],null],[1,\"                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                    \"],[11,\"button\"],[24,0,\"btn btn-secondary primary-text\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,6],[\"click\",[28,[37,7],[[30,0,[\"cancelAddUnit\"]]],null]],null],[12],[1,\"Cancel\"],[13],[1,\"\\n                    \"],[11,\"button\"],[16,0,[29,[\"btn secondary-background primary-text \",[52,[51,[30,0,[\"selectedUnit\"]]],\"\\r\\n                        disabled\"]]]],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,6],[\"click\",[28,[37,7],[[30,0,[\"addUnit\"]],[30,0,[\"selectedUnit\"]]],null]],null],[12],[1,\"Add Unit\\n                        to Army\"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\\n\"],[41,[30,0,[\"armyList\",\"length\"]],[[[1,\"    \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-xs-12 \"],[14,5,\"margin-top:20px\"],[12],[1,\"\\n        \"],[10,\"thead\"],[12],[1,\"\\n            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Upgrades\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"armyList\"]]],null]],null],null,[[[1,\"            \"],[10,\"tr\"],[12],[1,\"\\n                \"],[11,\"td\"],[24,\"role\",\"button\"],[4,[38,6],[\"click\",[28,[37,7],[[30,0,[\"removeUnit\"]],[30,2]],null]],null],[12],[1,\"X\"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"name\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"size\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"quality\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"defense\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,2,[\"equipment\"]]],null]],null],null,[[[10,0],[12],[1,[30,3]],[13]],[3]],null],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,2,[\"specialRules\"]]],null]],null],null,[[[1,\"                    \"],[10,1],[12],[1,[30,4]],[41,[51,[28,[37,5],[[30,4],[30,2,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\", \"]],[]],null],[13],[1,\"\\n\"]],[4]],null],[1,\"                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[41,[28,[37,9],[[30,2,[\"upgrades\",\"length\"]],0],null],[[[42,[28,[37,3],[[28,[37,3],[[30,2,[\"upgrades\"]]],null]],null],null,[[[1,\"                    \"],[10,1],[12],[1,[30,5]],[41,[51,[28,[37,5],[[30,5],[30,2,[\"upgrades\",\"lastObject\"]]],null]],[[[1,\", \"]],[]],null],[13],[1,\"\\n\"]],[5]],null]],[]],[[[1,\"                    \"],[10,1],[12],[1,\"-\"],[13],[1,\"\\n\"]],[]]],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,2,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n            \"],[13],[1,\"\\n\"]],[2]],null],[1,\"        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"]],[]],null],[13]],[\"unit\",\"unit\",\"equip\",\"specialRule\",\"upgrade\"],false,[\"page-title\",\"if\",\"each\",\"-track-array\",\"lte\",\"eq\",\"on\",\"fn\",\"unless\",\"gt\"]]",
     "moduleName": "army-builder/point-calculator/template.hbs",
     "isStrictMode": false
   });
@@ -1164,7 +1190,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("army-builder/app")["default"].create({"name":"army-builder","version":"0.0.0+2cb93d07"});
+            require("army-builder/app")["default"].create({"name":"army-builder","version":"0.0.0+a284c0ff"});
           }
         
 //# sourceMappingURL=army-builder.map
