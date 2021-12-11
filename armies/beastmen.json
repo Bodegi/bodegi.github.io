@@ -358,6 +358,9 @@
             "options": [
                 {
                     "subCategory": "Replace Hand Weapon",
+                    "keyWord":"replace",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "2x Hand Weapons (A3)",
@@ -379,6 +382,9 @@
                 },
                 {
                     "subCategory": "Upgrade with up to two",
+                    "keyWord":"add",
+                    "slot": "equipment",
+                    "count":2,
                     "choices": [
                         {
                             "equipment": "Beast Companion (A2, AP(1))",
@@ -393,6 +399,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with one",
+                    "keyWord":"add",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Shortbow (18”, A1)",
@@ -415,6 +424,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with one",
+                    "keyWord":"add",
+                    "slot": "special",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Bane",
@@ -437,6 +449,9 @@
             "options": [
                 {
                     "subCategory": "Replace Hand Weapon",
+                    "keyWord":"replace",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Great Weapon (A3, AP(3))",
@@ -454,6 +469,9 @@
                 },
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord":"add",
+                    "slot": "special",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Bull Charge (Impact(3))",
@@ -468,6 +486,9 @@
             "options": [
                 {
                     "subCategory": "Replace Hand Weapon",
+                    "keyWord":"replace",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "2x Hand Weapons (A1)",
@@ -477,6 +498,9 @@
                 },
                 {
                     "subCategory": "Upgrade Wizard(1)",
+                    "keyWord":"replace",
+                    "slot": "special",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Wizard(2)",
@@ -491,6 +515,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord":"addEach",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Sergeant",
@@ -513,6 +540,9 @@
             "options": [
                 {
                     "subCategory": "Replace all Hand Weapons",
+                    "keyWord":"replace",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Halberds (A1, Rending)",
@@ -539,6 +569,9 @@
             "options": [
                 {
                     "subCategory": "Replace all Hand Weapons",
+                    "keyWord":"replace",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Halberds (A1, Rending)",
@@ -565,6 +598,9 @@
             "options": [
                 {
                     "subCategory": "Replace all Hand Weapons",
+                    "keyWord":"replace",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Great Weapons (A3, AP(3))",
@@ -578,6 +614,9 @@
                 },
                 {
                     "subCategory": "Upgrade all models with",
+                    "keyWord":"add",
+                    "slot": "special",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Bull Charge (Impact(1))",
@@ -592,6 +631,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade all models with any",
+                    "keyWord":"addEach",
+                    "slot": "special",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Vicious Mutants (Poison in Melee)",
@@ -610,6 +652,9 @@
             "options": [
                 {
                     "subCategory": "Replace all Hand Weapons",
+                    "keyWord":"replace",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Lances (A2, Impact(1))",
@@ -623,6 +668,9 @@
                 },
                 {
                     "subCategory": "Upgrade all models with",
+                    "keyWord":"add",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Throwing Weapons (12”, A1)",
@@ -632,6 +680,9 @@
                 },
                 {
                     "subCategory": "Upgrade one model with",
+                    "keyWord":"add",
+                    "slot": "special",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Wizard(1)",
@@ -646,6 +697,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord":"add",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "2x Shortbows (18”, A1)",
@@ -660,6 +714,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord":"add",
+                    "slot": "special",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Beast Tamer (Furious, Regeneration)",
@@ -674,6 +731,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord":"add",
+                    "slot": "equipment",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Throw Rocks (24”, A1, AP(2), Blast(6), Indirect)",
@@ -688,6 +748,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord":"add",
+                    "slot": "special",
+                    "count":1,
                     "choices": [
                         {
                             "equipment": "Bull Charge (Impact(6))",
