@@ -922,16 +922,32 @@
       this.upgradeCostCheck();
     }
 
-    replaceItem(slot, item, unit) {
-      switch (slot) {
+    replaceItem(category, item, unit) {
+      switch (category.slot) {
         case "equipment":
-          // unit.equipment[0] = item.equipment;
-          unit.equipment.pushObject(item.equipment);
-          unit.equipment.removeAt(0);
+          (0, _object.set)(unit.equipment[0], "enabled", false);
+          unit.equipment.pushObject({
+            desc: item.equipment,
+            isUpgrade: true,
+            enabled: true,
+            originalLocation: category,
+            cost: item.cost
+          });
           break;
 
         case "special":
-          debugger;
+          if (item.equipment === "Wizard(2)") {
+            let special = unit.specialRules.findBy("desc", "Wizard(1)");
+            unit.specialRules.pushObject({
+              desc: item.equipment,
+              isUpgrade: true,
+              enabled: true,
+              originalLocation: category,
+              cost: item.cost
+            });
+            (0, _object.set)(special, "enabled", false);
+          }
+
           break;
 
         default:
@@ -941,14 +957,124 @@
       return unit;
     }
 
-    addItem(slot, item, unit) {
-      switch (slot) {
+    addItem(category, item, unit) {
+      switch (category.slot) {
         case "equipment":
-          unit.equipment.pushObject(item.equipment);
+          unit.equipment.pushObject({
+            desc: item.equipment,
+            isUpgrade: true,
+            enabled: true,
+            originalLocation: category,
+            cost: item.cost
+          });
+
+          if (category.keyWord === "add") {
+            unit.upgrades.map(upgrade => {
+              if (upgrade.choices === category.choices) {
+                let t = unit.equipment.filter(equip => item.equipment === equip.desc);
+
+                if (t.length === category.count) {
+                  (0, _object.set)(upgrade, "enabled", false);
+                }
+              }
+
+              return upgrade;
+            });
+          }
+
+          if (category.keyWord === "addEach") {
+            let x = category.choices.findBy("equipment", item.equipment);
+            (0, _object.set)(x, "enabled", false);
+            let bool = false;
+            category.choices.forEach(choice => {
+              if (choice.enabled) {
+                bool = true;
+              }
+            });
+
+            if (!bool) {
+              unit.upgrades.map(upgrade => {
+                if (upgrade.choices === category.choices) {
+                  (0, _object.set)(upgrade, "enabled", false);
+                }
+
+                return upgrade;
+              });
+            }
+          }
+
           break;
 
         case "special":
-          debugger;
+          unit.specialRules.pushObject({
+            desc: item.equipment,
+            isUpgrade: true,
+            enabled: true,
+            originalLocation: category,
+            cost: item.cost
+          });
+
+          if (category.keyWord === "add") {
+            unit.upgrades.map(upgrade => {
+              if (upgrade.choices === category.choices) {
+                let t = unit.specialRules.filter(special => item.equipment === special.desc);
+
+                if (t.length === category.count) {
+                  (0, _object.set)(upgrade, "enabled", false);
+                }
+              }
+
+              return upgrade;
+            });
+          }
+
+          if (category.keyWord === "addEach") {
+            let x = category.choices.findBy("equipment", item.equipment);
+            (0, _object.set)(x, "enabled", false);
+            let bool = false;
+            category.choices.forEach(choice => {
+              if (choice.enabled) {
+                bool = true;
+              }
+            });
+
+            if (!bool) {
+              unit.upgrades.map(upgrade => {
+                if (upgrade.choices === category.choices) {
+                  (0, _object.set)(upgrade, "enabled", false);
+                }
+
+                return upgrade;
+              });
+            }
+          }
+
+          break;
+
+        default:
+          break;
+      }
+
+      return unit;
+    }
+
+    removeItem(upgrade, unit) {
+      let category = upgrade.originalLocation;
+      unit.upgrades.map(upgrade => {
+        if (upgrade.subCategory === category.subCategory) {
+          (0, _object.set)(upgrade, "enabled", true);
+        }
+
+        return upgrade;
+      });
+
+      switch (upgrade.originalLocation.slot) {
+        case "equipment":
+          unit.equipment.removeAt(unit.equipment.indexOf(upgrade));
+          break;
+
+        case "special":
+          unit.specialRules.removeAt(unit.specialRules.indexOf(upgrade));
           break;
 
         default:
@@ -963,13 +1089,32 @@
     addUnit(sourceUnit) {
       let unit = {
         name: sourceUnit.name,
-        cost: sourceUnit.cost,
+        baseCost: sourceUnit.cost,
+        adjustedCost: sourceUnit.cost,
         defense: sourceUnit.defense,
-        equipment: JSON.parse(JSON.stringify(sourceUnit.equipment)),
+        equipment: JSON.parse(JSON.stringify(sourceUnit.equipment)).map(item => {
+          return {
+            desc: item,
+            isUpgrade: false,
+            enabled: true
+          };
+        }),
         quality: sourceUnit.quality,
         size: sourceUnit.size,
-        specialRules: JSON.parse(JSON.stringify(sourceUnit.specialRules)),
-        upgrades: JSON.parse(JSON.stringify(sourceUnit.upgrades)),
+        specialRules: JSON.parse(JSON.stringify(sourceUnit.specialRules)).map(item => {
+          return {
+            desc: item,
+            isUpgrade: false,
+            enabled: true
+          };
+        }),
+        upgrades: JSON.parse(JSON.stringify(sourceUnit.upgrades)).flat().map(upgrade => {
+          upgrade.enabled = true;
+          upgrade.choices.map(choice => {
+            choice.enabled = true;
+          });
+          return upgrade;
+        }),
         index: sourceUnit.index
       };
       const currentIndex = this.indexCounter;
@@ -978,7 +1123,7 @@
       let increment = this.indexCounter;
       increment++;
       (0, _object.set)(this, "indexCounter", increment);
-      (0, _object.set)(this.points, "remaining", this.points.remaining - unit.cost);
+      (0, _object.set)(this.points, "remaining", this.points.remaining - unit.baseCost);
       this.unitCostCheck();
     }
 
@@ -986,7 +1131,7 @@
       let index = this.findUnitIndex(unit);
       let modifiedArmyList = this.armyList.removeAt(index);
       (0, _object.set)(this, "armyList", modifiedArmyList);
-      (0, _object.set)(this.points, "remaining", this.points.remaining + unit.cost);
+      (0, _object.set)(this.points, "remaining", this.points.remaining + unit.adjustedCost);
       this.unitCostCheck();
     }
 
@@ -1007,17 +1152,30 @@
 
       switch (category.keyWord) {
         case "replace":
-          unit = this.replaceItem(category.slot, upgrade, unit);
+          unit = this.replaceItem(category, upgrade, unit);
+          unit.upgrades.map(upgrade => {
+            if (upgrade.subCategory === category.subCategory) {
+              (0, _object.set)(upgrade, "enabled", false);
+            }
+
+            return upgrade;
+          });
           break;
 
         case "add":
-          unit = this.replaceItem(category.slot, upgrade, unit);
+          unit = this.addItem(category, upgrade, unit);
+          break;
+
+        case "addEach":
+          unit = this.addItem(category, upgrade, unit);
           break;
 
         default:
           break;
       }
 
+      unit.adjustedCost = unit.adjustedCost + upgrade.cost;
+      (0, _object.set)(this, "tempPointsRemaining", this.tempPointsRemaining - upgrade.cost);
       (0, _object.set)(this, "selectedUnit", unit);
     }
 
@@ -1032,6 +1190,35 @@
       (0, _object.set)(this, "armyListUnit", null);
       (0, _object.set)(this.points, "remaining", this.tempPointsRemaining);
       (0, _object.set)(this, "tempPointsRemaining", null);
+    }
+
+    removeUpgrade(upgrade) {
+      let controller = this;
+      let unit = controller.selectedUnit;
+
+      if (upgrade.originalLocation.keyWord === "replace") {
+        if (upgrade.originalLocation.slot === "equipment") {
+          (0, _object.set)(unit.equipment[0], "enabled", true);
+        }
+
+        if (upgrade.originalLocation.slot === "special") {
+          let special = unit.specialRules.findBy("desc", "Wizard(1)");
+          (0, _object.set)(special, "enabled", true);
+        }
+      }
+
+      if (upgrade.originalLocation.keyWord === "addEach") {
+        let x = unit.upgrades.find(unitUpgrade => unitUpgrade.choices[0].equipment === upgrade.originalLocation.choices[0].equipment);
+        x.choices.map(choice => {
+          if (choice.equipment === upgrade.desc) {
+            (0, _object.set)(choice, "enabled", true);
+          }
+        });
+      }
+
+      controller.removeItem(upgrade, unit);
+      (0, _object.set)(unit, "adjustedCost", unit.adjustedCost - upgrade.cost);
+      (0, _object.set)(controller, "tempPointsRemaining", controller.tempPointsRemaining + upgrade.cost);
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "points", [_tracking.tracked], {
@@ -1107,7 +1294,7 @@
     initializer: function () {
       return null;
     }
-  }), _applyDecoratedDescriptor(_class.prototype, "addUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "addUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "cancelUpgradeUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "cancelUpgradeUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "initUpgrade", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "initUpgrade"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "selectUpgrade", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "selectUpgrade"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "updateUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "updateUnit"), _class.prototype)), _class);
+  }), _applyDecoratedDescriptor(_class.prototype, "addUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "addUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "cancelUpgradeUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "cancelUpgradeUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "initUpgrade", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "initUpgrade"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "selectUpgrade", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "selectUpgrade"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "updateUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "updateUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeUpgrade", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeUpgrade"), _class.prototype)), _class);
   _exports.default = PointCalculatorController;
 });
 ;define("army-builder/point-calculator/route", ["exports", "@ember/routing/route"], function (_exports, _route) {
@@ -1160,8 +1347,8 @@
   _exports.default = void 0;
 
   var _default = (0, _templateFactory.createTemplateFactory)({
-    "id": "glogO7ED",
-    "block": "[[[1,[28,[35,0],[\"PointCalculator\"],null]],[1,\"\\n\"],[10,0],[14,0,\"container text-center\"],[12],[1,\"\\n    \"],[10,\"h1\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"total\"]]],[1,\" Points Total\"],[13],[1,\"\\n    \"],[10,\"h3\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"remaining\"]]],[1,\" Points Remaining\"],[13],[1,\"\\n\"],[41,[30,0,[\"canAddUnit\"]],[[[1,\"    \"],[10,\"button\"],[14,0,\"btn primary-background primary-text\"],[14,\"data-bs-toggle\",\"modal\"],[14,\"data-bs-target\",\"#addUnitModal\"],[14,4,\"button\"],[12],[1,\"\\n        Add New Unit\\n    \"],[13],[1,\"\\n\"]],[]],null],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"modal fade\"],[14,1,\"addUnitModal\"],[14,\"tabindex\",\"-1\"],[14,\"data-bs-backdrop\",\"static\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-dialog modal-xl\"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n                \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                    \"],[10,\"h5\"],[14,0,\"modal-title\"],[12],[1,\"Add Unit\"],[13],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                    \"],[10,\"table\"],[14,0,\"table table-striped table-dark table-hover col-xs-12\"],[12],[1,\"\\n                        \"],[10,\"thead\"],[12],[1,\"\\n                            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                            \"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"model\",\"details\",\"units\"]]],null]],null],null,[[[41,[28,[37,4],[[30,1,[\"cost\"]],[30,0,[\"points\",\"remaining\"]]],null],[[[1,\"                            \"],[11,\"tr\"],[24,5,\"cursor: pointer;\"],[24,\"data-bs-dismiss\",\"modal\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"addUnit\"]],[30,1]],null]],null],[12],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"size\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"quality\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"defense\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,1,[\"equipment\"]]],null]],null],null,[[[10,0],[12],[1,[30,2]],[13]],[2]],null],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,1,[\"specialRules\"]]],null]],null],null,[[[1,\"                                    \"],[10,1],[12],[1,[30,3]],[41,[51,[28,[37,8],[[30,3],[30,1,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\",\\n                                        \"]],[]],null],[13],[1,\"\\n\"]],[3]],null],[1,\"                                \"],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n                            \"],[13],[1,\"\\n\"]],[]],null]],[1]],null],[1,\"                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn btn-secondary primary-text\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[1,\"Cancel\"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\\n\\n\"],[41,[30,0,[\"armyList\",\"length\"]],[[[1,\"    \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-xs-12 \"],[14,5,\"margin-top:20px\"],[12],[1,\"\\n        \"],[10,\"thead\"],[12],[1,\"\\n            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Upgrades\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Remove\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"armyList\"]]],null]],null],null,[[[1,\"            \"],[10,\"tr\"],[12],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"name\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"size\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"quality\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"defense\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,4,[\"equipment\"]]],null]],null],null,[[[10,0],[12],[1,[30,5]],[13]],[5]],null],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,4,[\"specialRules\"]]],null]],null],null,[[[1,\"                    \"],[10,1],[12],[1,[30,6]],[41,[51,[28,[37,8],[[30,6],[30,4,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\", \"]],[]],null],[13],[1,\"\\n\"]],[6]],null],[1,\"                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[41,[28,[37,9],[[30,4,[\"upgrades\",\"length\"]],0],null],[[[1,\"                    \"],[11,1],[24,\"role\",\"button\"],[24,\"data-bs-toggle\",\"modal\"],[24,\"data-bs-target\",\"#upgradeModal\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"initUpgrade\"]],[30,4]],null]],null],[12],[1,\"Select Upgrades\"],[13],[1,\"\\n\"]],[]],[[[1,\"                    \"],[10,1],[12],[1,\"-\"],[13],[1,\"\\n\"]],[]]],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n                \"],[11,\"td\"],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUnit\"]],[30,4]],null]],null],[12],[1,\"X\"],[13],[1,\"\\n            \"],[13],[1,\"\\n\"]],[4]],null],[1,\"        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"]],[]],null],[13],[1,\"\\n\\n\"],[1,\"\\n\"],[10,0],[14,0,\"modal fade\"],[14,1,\"upgradeModal\"],[14,\"tabindex\",\"-1\"],[12],[1,\"\\n    \"],[10,0],[14,0,\"modal-dialog modal-xl\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                \"],[10,\"h5\"],[14,0,\"modal-title\"],[12],[1,[30,0,[\"selectedUnit\",\"name\"]]],[1,\" Upgrades\"],[13],[1,\"\\n                \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,\"aria-label\",\"Close\"],[14,4,\"button\"],[12],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-md-12\"],[12],[1,\"\\n                    \"],[10,\"thead\"],[12],[1,\"\\n                        \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                    \"],[10,\"tbody\"],[12],[1,\"\\n                        \"],[10,\"tr\"],[12],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"name\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"size\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"quality\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"defense\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"equipment\"]]],null]],null],null,[[[10,0],[12],[1,[30,7]],[13]],[7]],null],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"specialRules\"]]],null]],null],null,[[[1,\"                                \"],[10,1],[12],[1,[30,8]],[41,[51,[28,[37,8],[[30,8],[30,0,[\"selectedUnit\",\"specialRules\",\"lastObject\"]]],null]],[[[1,\",\\n                                    \"]],[]],null],[13],[1,\"\\n\"]],[8]],null],[1,\"                            \"],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"text-center container-fluid col-md-12\"],[12],[1,\"\\n                    \"],[10,0],[14,0,\"row\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"upgrades\"]]],null]],null],null,[[[42,[28,[37,3],[[28,[37,3],[[30,9]],null]],null],null,[[[1,\"                            \"],[10,0],[14,0,\"col-md-4\"],[12],[1,\"\\n                                \"],[10,\"h4\"],[12],[1,[30,10,[\"subCategory\"]]],[13],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,10,[\"choices\"]]],null]],null],null,[[[41,[28,[37,4],[[30,11,[\"cost\"]],[30,0,[\"tempPointsRemaining\"]]],null],[[[1,\"                                \"],[11,0],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"selectUpgrade\"]],[30,10],[30,11]],null]],null],[12],[1,[30,11,[\"equipment\"]]],[1,\" \"],[1,[30,11,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n\"]],[]],null]],[11]],null],[1,\"                            \"],[13],[1,\"\\n\"]],[10]],null]],[9]],null],[1,\"                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                \"],[11,\"button\"],[24,0,\"btn btn-secondary\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"cancelUpgradeUnit\"]]],null]],null],[12],[1,\"Cancel\"],[13],[1,\"\\n                \"],[11,\"button\"],[24,0,\"btn btn-primary\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"updateUnit\"]]],null]],null],[12],[1,\"Update Unit\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13]],[\"unit\",\"equip\",\"specialRule\",\"armyUnit\",\"equip\",\"specialRule\",\"equip\",\"specialRule\",\"options\",\"option\",\"choice\"],false,[\"page-title\",\"if\",\"each\",\"-track-array\",\"lte\",\"on\",\"fn\",\"unless\",\"eq\",\"gt\"]]",
+    "id": "VC22CqBf",
+    "block": "[[[1,[28,[35,0],[\"PointCalculator\"],null]],[1,\"\\n\"],[10,0],[14,0,\"container text-center\"],[12],[1,\"\\n    \"],[10,\"h1\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"total\"]]],[1,\" Points Total\"],[13],[1,\"\\n    \"],[10,\"h3\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"remaining\"]]],[1,\" Points Remaining\"],[13],[1,\"\\n\"],[41,[30,0,[\"canAddUnit\"]],[[[1,\"    \"],[10,\"button\"],[14,0,\"btn primary-background primary-text\"],[14,\"data-bs-toggle\",\"modal\"],[14,\"data-bs-target\",\"#addUnitModal\"],[14,4,\"button\"],[12],[1,\"\\n        Add New Unit\\n    \"],[13],[1,\"\\n\"]],[]],null],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"modal fade\"],[14,1,\"addUnitModal\"],[14,\"tabindex\",\"-1\"],[14,\"data-bs-backdrop\",\"static\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-dialog modal-xl\"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n                \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                    \"],[10,\"h5\"],[14,0,\"modal-title\"],[12],[1,\"Add Unit\"],[13],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                    \"],[10,\"table\"],[14,0,\"table table-striped table-dark table-hover col-xs-12\"],[12],[1,\"\\n                        \"],[10,\"thead\"],[12],[1,\"\\n                            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                            \"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"model\",\"details\",\"units\"]]],null]],null],null,[[[41,[28,[37,4],[[30,1,[\"cost\"]],[30,0,[\"points\",\"remaining\"]]],null],[[[1,\"                            \"],[11,\"tr\"],[24,5,\"cursor: pointer;\"],[24,\"data-bs-dismiss\",\"modal\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"addUnit\"]],[30,1]],null]],null],[12],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"size\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"quality\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"defense\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,1,[\"equipment\"]]],null]],null],null,[[[10,0],[12],[1,[30,2]],[13]],[2]],null],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,1,[\"specialRules\"]]],null]],null],null,[[[1,\"\\n                                    \"],[10,1],[12],[1,[30,3]],[41,[51,[28,[37,8],[[30,3],[30,1,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\",\\n                                        \"]],[]],null],[13],[1,\"\\n\"]],[3]],null],[1,\"                                \"],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n                            \"],[13],[1,\"\\n\"]],[]],null]],[1]],null],[1,\"                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn btn-secondary primary-text\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[1,\"Cancel\"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\\n\\n\"],[41,[30,0,[\"armyList\",\"length\"]],[[[1,\"    \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-xs-12 \"],[14,5,\"margin-top:20px\"],[12],[1,\"\\n        \"],[10,\"thead\"],[12],[1,\"\\n            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Upgrades\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Remove\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"armyList\"]]],null]],null],null,[[[1,\"            \"],[10,\"tr\"],[12],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"name\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"size\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"quality\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"defense\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,4,[\"equipment\"]]],null]],null],null,[[[1,\"\\n\"],[41,[30,5,[\"enabled\"]],[[[1,\"                    \"],[10,0],[12],[1,[30,5,[\"desc\"]]],[13],[1,\"\\n\"]],[]],null]],[5]],null],[1,\"                \"],[13],[1,\"\\n\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,4,[\"specialRules\"]]],null]],null],null,[[[41,[30,6,[\"enabled\"]],[[[1,\"                    \"],[10,1],[12],[1,[30,6,[\"desc\"]]],[41,[51,[28,[37,8],[[30,6],[30,4,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\",\\n                        \"]],[]],null],[13],[1,\"\\n\"]],[]],null]],[6]],null],[1,\"                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[41,[28,[37,9],[[30,4,[\"upgrades\",\"length\"]],0],null],[[[1,\"                    \"],[11,1],[24,\"role\",\"button\"],[24,\"data-bs-toggle\",\"modal\"],[24,\"data-bs-target\",\"#upgradeModal\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"initUpgrade\"]],[30,4]],null]],null],[12],[1,\"Select Upgrades\"],[13],[1,\"\\n\"]],[]],[[[1,\"                    \"],[10,1],[12],[1,\"-\"],[13],[1,\"\\n\"]],[]]],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"adjustedCost\"]]],[1,\" Pts\"],[13],[1,\"\\n                \"],[11,\"td\"],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUnit\"]],[30,4]],null]],null],[12],[1,\"X\"],[13],[1,\"\\n            \"],[13],[1,\"\\n\"]],[4]],null],[1,\"        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"]],[]],null],[13],[1,\"\\n\\n\"],[1,\"\\n\"],[10,0],[14,0,\"modal fade\"],[14,1,\"upgradeModal\"],[14,\"tabindex\",\"-1\"],[14,\"data-bs-backdrop\",\"static\"],[12],[1,\"\\n    \"],[10,0],[14,0,\"modal-dialog modal-xl\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                \"],[10,\"h5\"],[14,0,\"modal-title\"],[12],[1,[30,0,[\"selectedUnit\",\"name\"]]],[1,\" Upgrades\"],[13],[1,\"\\n                \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,\"aria-label\",\"Close\"],[14,4,\"button\"],[12],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-md-12\"],[12],[1,\"\\n                    \"],[10,\"thead\"],[12],[1,\"\\n                        \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                    \"],[10,\"tbody\"],[12],[1,\"\\n                        \"],[10,\"tr\"],[12],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"name\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"size\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"quality\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"defense\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"equipment\"]]],null]],null],null,[[[1,\"\\n\"],[41,[30,7,[\"enabled\"]],[[[41,[30,7,[\"isUpgrade\"]],[[[1,\"                                \"],[10,0],[12],[1,[30,7,[\"desc\"]]],[1,\" \"],[11,1],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUpgrade\"]],[30,7]],null]],null],[12],[1,\"X\"],[13],[13],[1,\"\\n\"]],[]],[[[1,\"                                \"],[10,0],[12],[1,[30,7,[\"desc\"]]],[13],[1,\"\\n\"]],[]]]],[]],null]],[7]],null],[1,\"                            \"],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"specialRules\"]]],null]],null],null,[[[41,[30,8,[\"enabled\"]],[[[41,[30,8,[\"isUpgrade\"]],[[[1,\"                                \"],[10,0],[12],[1,[30,8,[\"desc\"]]],[1,\" \"],[11,1],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUpgrade\"]],[30,8]],null]],null],[12],[1,\"X\"],[13],[13],[1,\"\\n\"]],[]],[[[1,\"                                \"],[10,0],[12],[1,[30,8,[\"desc\"]]],[13],[1,\"\\n\"]],[]]]],[]],null]],[8]],null],[1,\"                            \"],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"adjustedCost\"]]],[1,\" Pts\"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"text-center container-fluid col-md-12\"],[12],[1,\"\\n                    \"],[10,0],[14,0,\"row\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"upgrades\"]]],null]],null],null,[[[1,\"                        \"],[10,0],[14,0,\"col-md-4\"],[12],[1,\"\\n                            \"],[10,\"h4\"],[12],[1,[30,9,[\"subCategory\"]]],[13],[1,\"\\n\"],[41,[30,9,[\"enabled\"]],[[[42,[28,[37,3],[[28,[37,3],[[30,9,[\"choices\"]]],null]],null],null,[[[41,[30,10,[\"enabled\"]],[[[41,[28,[37,4],[[30,10,[\"cost\"]],[30,0,[\"tempPointsRemaining\"]]],null],[[[1,\"                            \"],[11,0],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"selectUpgrade\"]],[30,9],[30,10]],null]],null],[12],[1,\"\\n                                \"],[1,[30,10,[\"equipment\"]]],[1,\"\\n                                \"],[1,[30,10,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n\"]],[]],null]],[]],null]],[10]],null]],[]],[[[1,\"                            \"],[10,1],[12],[1,\"Upgrade(s) already selected\"],[13],[1,\"\\n\"]],[]]],[1,\"                        \"],[13],[1,\"\\n\\n\"]],[9]],null],[1,\"                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                \"],[11,\"button\"],[24,0,\"btn btn-secondary\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"cancelUpgradeUnit\"]]],null]],null],[12],[1,\"Cancel\"],[13],[1,\"\\n                \"],[11,\"button\"],[24,0,\"btn btn-primary\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"updateUnit\"]]],null]],null],[12],[1,\"Update Unit\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13]],[\"unit\",\"equip\",\"specialRule\",\"armyUnit\",\"equip\",\"specialRule\",\"equip\",\"specialRule\",\"upgrade\",\"choice\"],false,[\"page-title\",\"if\",\"each\",\"-track-array\",\"lte\",\"on\",\"fn\",\"unless\",\"eq\",\"gt\"]]",
     "moduleName": "army-builder/point-calculator/template.hbs",
     "isStrictMode": false
   });
@@ -1352,7 +1539,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("army-builder/app")["default"].create({"name":"army-builder","version":"0.0.0+aacdbc64"});
+            require("army-builder/app")["default"].create({"name":"army-builder","version":"0.0.0+751690db"});
           }
         
 //# sourceMappingURL=army-builder.map
