@@ -9,7 +9,7 @@
                 "Hand Weapon (A3)"
             ],
             "specialRules": [
-                "Furious",
+                "Fearless",
                 "Hero",
                 "Tough(3)"
             ],
@@ -44,14 +44,17 @@
             "quality": 3,
             "defense": 5,
             "equipment": [
-                "Pistol (12”, A1, AP(1))", "Hand Weapon (A3)"
+                "Pistol (12”, A1, AP(1))",
+                "Hand Weapon (A3)"
             ],
             "specialRules": [
                 "Hero",
                 "Tough(3)"
             ],
             "upgrades": [
-                "A","B","E"
+                "A",
+                "B",
+                "E"
             ],
             "cost": 45
         },
@@ -68,7 +71,9 @@
                 "Tough(3)"
             ],
             "upgrades": [
-                "A","B","F"
+                "A",
+                "B",
+                "F"
             ],
             "cost": 40
         },
@@ -82,7 +87,8 @@
             ],
             "specialRules": [
                 "Hero",
-                "Tough(3)","Wizard(1)"
+                "Tough(3)",
+                "Wizard(1)"
             ],
             "upgrades": [
                 "G"
@@ -97,9 +103,11 @@
             "equipment": [
                 "Hand Weapons (A1)"
             ],
-            "specialRules": [
+            "specialRules": [],
+            "upgrades": [
+                "H",
+                "I"
             ],
-            "upgrades": ["H","I"],
             "cost": 90
         },
         {
@@ -111,10 +119,10 @@
                 "Great Weapons (A1, AP(2))"
             ],
             "specialRules": [
-                "Fearless", "Furious"
+                "Fearless",
+                "Furious"
             ],
-            "upgrades": [
-            ],
+            "upgrades": [],
             "cost": 110
         },
         {
@@ -139,12 +147,12 @@
             "quality": 5,
             "defense": 6,
             "equipment": [
-                "Bows (24”, A1), Hand Weapons (A1)"
+                "Bows (24”, A1)", "Hand Weapons (A1)"
             ],
-            "specialRules": [
-            ],
+            "specialRules": [],
             "upgrades": [
-                "H","J"
+                "H",
+                "J"
             ],
             "cost": 45
         },
@@ -179,7 +187,8 @@
                 "Impact(1)"
             ],
             "upgrades": [
-                "H","L"
+                "H",
+                "L"
             ],
             "cost": 130
         },
@@ -189,14 +198,17 @@
             "quality": 3,
             "defense": 3,
             "equipment": [
-                "Halberds (A1, Rending)", "Claws (A3, AP(1))"
+                "Halberds (A1, Rending)",
+                "Claws (A3, AP(1))"
             ],
             "specialRules": [
                 "Fast",
-                "Impact(3)","Tough(3)"
+                "Impact(3)",
+                "Tough(3)"
             ],
             "upgrades": [
-                "H","M"
+                "H",
+                "M"
             ],
             "cost": 205
         },
@@ -206,10 +218,13 @@
             "quality": 4,
             "defense": 2,
             "equipment": [
-                "Crew Attacks (A2)", "Hooves (A2)"
+                "Crew Attacks (A2)",
+                "Hooves (A2)"
             ],
             "specialRules": [
-                "Fast", "Impact(6)", "Tough(6)"
+                "Fast",
+                "Impact(6)",
+                "Tough(6)"
             ],
             "upgrades": [
                 "N"
@@ -223,10 +238,14 @@
             "defense": 2,
             "equipment": [
                 "Hurricane (24”, A1, AP(2) Blast(3))",
-                "Crew Attacks (A2)", "Hooves (A2)"
+                "Crew Attacks (A2)",
+                "Hooves (A2)"
             ],
             "specialRules": [
-                "Battle Aura", "Fast", "Impact(6)", "Tough(6)"
+                "Battle Aura",
+                "Fast",
+                "Impact(6)",
+                "Tough(6)"
             ],
             "upgrades": [],
             "cost": 215
@@ -237,13 +256,17 @@
             "quality": 4,
             "defense": 2,
             "equipment": [
-                "Searing Beam (36”, A1, AP(3) Deadly(3))", "Crew Attacks (A2)", "Hooves (A2)"
+                "Searing Beam (36”, A1, AP(3) Deadly(3))",
+                "Crew Attacks (A2)",
+                "Hooves (A2)"
             ],
             "specialRules": [
-                "Fast", "Impact(6)", "Protective Aura", "Tough(6)"
+                "Fast",
+                "Impact(6)",
+                "Protective Aura",
+                "Tough(6)"
             ],
-            "upgrades": [
-            ],
+            "upgrades": [],
             "cost": 220
         },
         {
@@ -253,10 +276,14 @@
             "defense": 2,
             "equipment": [
                 "Banishment (24”, A6, AP(2))",
-                "Crew Attacks (A2)", "Hooves (A2)"
+                "Crew Attacks (A2)",
+                "Hooves (A2)"
             ],
             "specialRules": [
-                "Aura of Fury", "Fast", "Impact(6)", "Tough(6)"
+                "Aura of Fury",
+                "Fast",
+                "Impact(6)",
+                "Tough(6)"
             ],
             "upgrades": [],
             "cost": 225
@@ -267,13 +294,16 @@
             "quality": 4,
             "defense": 2,
             "equipment": [
-                "Tank Cannon (36”, A1, AP(4) Blast(3))", "Turret Gun (12”, A6)"
+                "Tank Cannon (36”, A1, AP(4) Blast(3))",
+                "Turret Gun (12”, A6)"
             ],
             "specialRules": [
-                "Fast", "Fear", "Impact(6)", "Tough(9)"
+                "Fast",
+                "Fear",
+                "Impact(6)",
+                "Tough(9)"
             ],
-            "upgrades": [
-            ],
+            "upgrades": [],
             "cost": 255
         },
         {
@@ -282,13 +312,15 @@
             "quality": 5,
             "defense": 5,
             "equipment": [
-                "Cannon (48”, A1, AP(4), Blast(3))", "Crew (A3)"
+                "Cannon (48”, A1, AP(4), Blast(3))",
+                "Crew (A3)"
             ],
             "specialRules": [
-                "Artillery", "Immobile", "Tough(3)"
+                "Artillery",
+                "Immobile",
+                "Tough(3)"
             ],
-            "upgrades": [
-            ],
+            "upgrades": [],
             "cost": 55
         },
         {
@@ -297,13 +329,15 @@
             "quality": 5,
             "defense": 5,
             "equipment": [
-                "Rockets (48”, A2, AP(1), Blast(3), Indirect)", "Crew(A3)"
+                "Rockets (48”, A2, AP(1), Blast(3), Indirect)",
+                "Crew(A3)"
             ],
             "specialRules": [
-                "Artillery", "Immobile", "Tough(3)"
+                "Artillery",
+                "Immobile",
+                "Tough(3)"
             ],
-            "upgrades": [
-            ],
+            "upgrades": [],
             "cost": 75
         },
         {
@@ -312,10 +346,13 @@
             "quality": 5,
             "defense": 5,
             "equipment": [
-                "Mortar (48”, A1, AP(1), Blast(6), Indirect)", "Crew (A3)"
+                "Mortar (48”, A1, AP(1), Blast(6), Indirect)",
+                "Crew (A3)"
             ],
             "specialRules": [
-                "Artillery", "Immobile", "Tough(3)"
+                "Artillery",
+                "Immobile",
+                "Tough(3)"
             ],
             "upgrades": [],
             "cost": 75
@@ -326,10 +363,13 @@
             "quality": 5,
             "defense": 5,
             "equipment": [
-                "Volley Gun (24”, A12, AP(2))", "Crew (A3)"
+                "Volley Gun (24”, A12, AP(2))",
+                "Crew (A3)"
             ],
             "specialRules": [
-                "Artillery", "Immobile", "Tough(3)"
+                "Artillery",
+                "Immobile",
+                "Tough(3)"
             ],
             "upgrades": [],
             "cost": 80
@@ -341,6 +381,9 @@
             "options": [
                 {
                     "subCategory": "Replace Hand Weapon",
+                    "keyWord": "replace",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "2x Hand Weapons (A3)",
@@ -371,6 +414,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with one",
+                    "keyWord": "add",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Pistol (12”, A1, AP(1))",
@@ -393,6 +439,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Inspiring Presence",
@@ -402,6 +451,9 @@
                 },
                 {
                     "subCategory": "Mount on",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Horse – Fast, Impact(1)",
@@ -428,6 +480,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Battle Chant",
@@ -437,6 +492,9 @@
                 },
                 {
                     "subCategory": "Mount on",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Horse – Fast, Impact(1)",
@@ -451,6 +509,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Accusation",
@@ -465,6 +526,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Ballistic Master",
@@ -474,6 +538,9 @@
                 },
                 {
                     "subCategory": "Upgrade with one",
+                    "keyWord": "add",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Gatling Pistol (12”, A3, AP(1))",
@@ -495,6 +562,9 @@
                 },
                 {
                     "subCategory": "Mount on",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Horse – Fast, Impact(1)",
@@ -513,6 +583,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade Wizard(1)",
+                    "keyWord": "replace",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Wizard(2)",
@@ -522,6 +595,9 @@
                 },
                 {
                     "subCategory": "Mount on",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Horse – Fast, Impact(1)",
@@ -536,6 +612,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade with",
+                    "keyWord": "addEach",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Sergeant",
@@ -558,6 +637,9 @@
             "options": [
                 {
                     "subCategory": "Replace all Hand Weapons",
+                    "keyWord": "replace",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Halberds (A1, Rending)",
@@ -584,6 +666,9 @@
             "options": [
                 {
                     "subCategory": "Replace all Bows",
+                    "keyWord": "replace",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Rifles (24”, A1, AP(1))",
@@ -597,6 +682,9 @@
                 },
                 {
                     "subCategory": "Replace one Bow",
+                    "keyWord": "add",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "2x Pistols (12”, A1, AP(1))",
@@ -614,6 +702,9 @@
                 },
                 {
                     "subCategory": "Upgrade all models with any",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Skirmishers (Stealth)",
@@ -632,6 +723,9 @@
             "options": [
                 {
                     "subCategory": "Upgrade all models with one",
+                    "keyWord": "add",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Shortbows (18”, A1)",
@@ -649,6 +743,9 @@
                 },
                 {
                     "subCategory": "Upgrade one model with",
+                    "keyWord": "add",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "2x Gatling Pistols (12”, A3, AP(1))",
@@ -667,6 +764,9 @@
             "options": [
                 {
                     "subCategory": "Replace all Hand Weapons",
+                    "keyWord": "replace",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Great Weapons (A1, AP(2))",
@@ -677,8 +777,12 @@
                             "cost": 15
                         }
                     ]
-                },{
+                },
+                {
                     "subCategory": "Upgrade all models with",
+                    "keyWord": "add",
+                    "slot": "special",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Inner Circle Knights (Fearless)",
@@ -693,6 +797,9 @@
             "options": [
                 {
                     "subCategory": "Replace all Halberds",
+                    "keyWord": "replace",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Lances (A1, Impact(1))",
@@ -707,6 +814,9 @@
             "options": [
                 {
                     "subCategory": "Replace Crew Attacks",
+                    "keyWord": "replace",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Array of Heavy Weapons (A4, AP(2), Rending)",
@@ -716,6 +826,9 @@
                 },
                 {
                     "subCategory": "Upgrade with any",
+                    "keyWord": "add",
+                    "slot": "equipment",
+                    "count": 1,
                     "choices": [
                         {
                             "equipment": "Blunderbuss (12”, A6)",

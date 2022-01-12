@@ -306,8 +306,8 @@
   _exports.default = void 0;
 
   var _default = (0, _templateFactory.createTemplateFactory)({
-    "id": "W8RJd/4J",
-    "block": "[[[10,\"nav\"],[14,0,\"navbar navbar-expand-lg navbar-dark bg-dark\"],[14,5,\"margin-bottom:20px\"],[12],[1,\"\\n  \"],[10,0],[14,0,\"container\"],[12],[1,\"\\n      \"],[10,\"ul\"],[14,0,\"navbar-nav mx-auto mb-2 mb-lg-0\"],[12],[1,\"\\n        \"],[10,\"li\"],[14,0,\"nav-item\"],[12],[1,\"\\n          \"],[8,[39,0],[[24,0,\"nav-link\"]],[[\"@route\"],[\"index\"]],[[\"default\"],[[[[1,\"Home\"]],[]]]]],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,\"li\"],[14,0,\"nav-item\"],[12],[1,\"\\n          \"],[8,[39,0],[[24,0,\"nav-link\"]],[[\"@route\"],[\"armies\"]],[[\"default\"],[[[[1,\"Army-Info\"]],[]]]]],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,\"li\"],[14,0,\"nav-item\"],[12],[1,\"\\n          \"],[8,[39,0],[[24,0,\"nav-link\"]],[[\"@route\"],[\"point-calculator\"]],[[\"default\"],[[[[1,\"Point-Calculator\"]],[]]]]],[1,\"\\n        \"],[13],[1,\"\\n      \"],[13],[1,\"\\n\"],[1,\"  \"],[13],[1,\"\\n\"],[13]],[],false,[\"link-to\"]]",
+    "id": "8ZzO3ybe",
+    "block": "[[[10,\"nav\"],[14,0,\"navbar navbar-expand-lg navbar-dark bg-dark\"],[14,5,\"margin-bottom:20px\"],[12],[1,\"\\n  \"],[10,0],[14,0,\"container\"],[12],[1,\"\\n      \"],[10,\"ul\"],[14,0,\"navbar-nav mx-auto mb-2 mb-lg-0\"],[12],[1,\"\\n        \"],[10,\"li\"],[14,0,\"nav-item\"],[12],[1,\"\\n          \"],[8,[39,0],[[24,0,\"nav-link\"]],[[\"@route\"],[\"index\"]],[[\"default\"],[[[[1,\"Home\"]],[]]]]],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,\"li\"],[14,0,\"nav-item\"],[12],[1,\"\\n          \"],[8,[39,0],[[24,0,\"nav-link\"]],[[\"@route\"],[\"armies\"]],[[\"default\"],[[[[1,\"View Army Info\"]],[]]]]],[1,\"\\n        \"],[13],[1,\"\\n\"],[1,\"        \"],[10,\"li\"],[14,0,\"nav-item\"],[12],[1,\"\\n          \"],[8,[39,0],[[24,0,\"nav-link\"]],[[\"@route\"],[\"point-calculators\"]],[[\"default\"],[[[[1,\"Build Army\"]],[]]]]],[1,\"\\n        \"],[13],[1,\"\\n      \"],[13],[1,\"\\n\"],[1,\"  \"],[13],[1,\"\\n\"],[13]],[],false,[\"link-to\"]]",
     "moduleName": "army-builder/components/site-menu/template.hbs",
     "isStrictMode": false
   });
@@ -700,8 +700,8 @@
   _exports.default = void 0;
 
   var _default = (0, _templateFactory.createTemplateFactory)({
-    "id": "jE/K6KL/",
-    "block": "[[[1,[28,[35,0],[\"Army Selector\"],null]],[1,\"\\n\"],[10,0],[14,0,\"container text-center\"],[12],[1,\"\\n    Index WIP\\n\"],[13]],[],false,[\"page-title\"]]",
+    "id": "7m6M4yuv",
+    "block": "[[[1,[28,[35,0],[\"Army Selector\"],null]],[1,\"\\n\"],[10,0],[14,0,\"container text-center\"],[12],[1,\"\\n    Welcome to the in-progress app for building \\\"Age of Fantasy: Regiments\\\" armies!\\n\"],[13]],[],false,[\"page-title\"]]",
     "moduleName": "army-builder/index/template.hbs",
     "isStrictMode": false
   });
@@ -850,7 +850,50 @@
   };
   _exports.default = _default;
 });
-;define("army-builder/point-calculator/controller", ["exports", "@ember/controller", "@ember/object", "@glimmer/tracking", "@ember/array"], function (_exports, _controller, _object, _tracking, _array) {
+;define("army-builder/point-calculators/index/route", ["exports", "@ember/routing/route", "jquery", "army-builder/config/environment", "@ember/array", "@ember/string"], function (_exports, _route, _jquery, _environment, _array, _string) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class PointCalculatorsIndexRoute extends _route.default {
+    async model() {
+      let armies = (0, _array.A)();
+      await _environment.default.armies.forEach(army => {
+        let name = army;
+        armies.pushObject({
+          name: (0, _string.capitalize)(name),
+          details: _jquery.default.getJSON('/armies/' + army + '.json'),
+          image: '/images/armies/' + army + '.png'
+        });
+      });
+      return armies;
+    }
+
+  }
+
+  _exports.default = PointCalculatorsIndexRoute;
+});
+;define("army-builder/point-calculators/index/template", ["exports", "@ember/template-factory"], function (_exports, _templateFactory) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = (0, _templateFactory.createTemplateFactory)({
+    "id": "Rw+BD6Im",
+    "block": "[[[1,[28,[35,0],[\"Army Selector\"],null]],[1,\"\\n\"],[10,0],[14,0,\"container text-center\"],[12],[1,\"\\n    \"],[10,0],[14,0,\"row col-sm-12\"],[12],[1,\"\\n\"],[42,[28,[37,2],[[28,[37,2],[[30,0,[\"model\"]]],null]],null],null,[[[1,\"        \"],[10,0],[14,0,\"card primary-background col-sm-4\"],[14,5,\"width: 18rem; margin-left:10px; margin-right:10px; margin-bottom:10px; margin-top:10px;\"],[12],[1,\"\\n            \"],[10,\"h5\"],[14,0,\"card-title\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n            \"],[10,\"img\"],[15,\"src\",[30,1,[\"image\"]]],[14,0,\"card-img-top army-card-logo\"],[12],[13],[1,\"\\n            \"],[10,0],[14,0,\"card-body\"],[12],[1,\"\\n                \"],[8,[39,3],[[24,5,\"color:white\"]],[[\"@route\",\"@model\"],[\"point-calculators.point-calculator\",[30,1,[\"name\"]]]],[[\"default\"],[[[[1,\"Build Army\"]],[]]]]],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n\"]],[1]],null],[1,\"    \"],[13],[1,\"\\n\"],[13]],[\"army\"],false,[\"page-title\",\"each\",\"-track-array\",\"link-to\"]]",
+    "moduleName": "army-builder/point-calculators/index/template.hbs",
+    "isStrictMode": false
+  });
+
+  _exports.default = _default;
+});
+;define("army-builder/point-calculators/point-calculator/controller", ["exports", "@ember/controller", "@ember/object", "@glimmer/tracking", "@ember/array"], function (_exports, _controller, _object, _tracking, _array) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -868,7 +911,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let PointCalculatorController = (_class = class PointCalculatorController extends _controller.default {
+  let PointCalculatorsPointCalculatorController = (_class = class PointCalculatorsPointCalculatorController extends _controller.default {
     constructor() {
       super(...arguments);
 
@@ -913,8 +956,7 @@
           bool = true;
         }
       });
-      ;
-      (0, _object.set)(this, "canAddUnit", bool);
+      (0, _object.set)(this, 'canAddUnit', bool);
     }
 
     updateCostChecks() {
@@ -924,8 +966,8 @@
 
     replaceItem(category, item, unit) {
       switch (category.slot) {
-        case "equipment":
-          (0, _object.set)(unit.equipment[0], "enabled", false);
+        case 'equipment':
+          (0, _object.set)(unit.equipment[0], 'enabled', false);
           unit.equipment.pushObject({
             desc: item.equipment,
             isUpgrade: true,
@@ -935,9 +977,9 @@
           });
           break;
 
-        case "special":
-          if (item.equipment === "Wizard(2)") {
-            let special = unit.specialRules.findBy("desc", "Wizard(1)");
+        case 'special':
+          if (item.equipment === 'Wizard(2)') {
+            let special = unit.specialRules.findBy('desc', 'Wizard(1)');
             unit.specialRules.pushObject({
               desc: item.equipment,
               isUpgrade: true,
@@ -945,7 +987,7 @@
               originalLocation: category,
               cost: item.cost
             });
-            (0, _object.set)(special, "enabled", false);
+            (0, _object.set)(special, 'enabled', false);
           }
 
           break;
@@ -959,7 +1001,7 @@
 
     addItem(category, item, unit) {
       switch (category.slot) {
-        case "equipment":
+        case 'equipment':
           unit.equipment.pushObject({
             desc: item.equipment,
             isUpgrade: true,
@@ -968,13 +1010,13 @@
             cost: item.cost
           });
 
-          if (category.keyWord === "add") {
+          if (category.keyWord === 'add') {
             unit.upgrades.map(upgrade => {
               if (upgrade.choices === category.choices) {
                 let t = unit.equipment.filter(equip => item.equipment === equip.desc);
 
                 if (t.length === category.count) {
-                  (0, _object.set)(upgrade, "enabled", false);
+                  (0, _object.set)(upgrade, 'enabled', false);
                 }
               }
 
@@ -982,9 +1024,9 @@
             });
           }
 
-          if (category.keyWord === "addEach") {
-            let x = category.choices.findBy("equipment", item.equipment);
-            (0, _object.set)(x, "enabled", false);
+          if (category.keyWord === 'addEach') {
+            let x = category.choices.findBy('equipment', item.equipment);
+            (0, _object.set)(x, 'enabled', false);
             let bool = false;
             category.choices.forEach(choice => {
               if (choice.enabled) {
@@ -995,7 +1037,7 @@
             if (!bool) {
               unit.upgrades.map(upgrade => {
                 if (upgrade.choices === category.choices) {
-                  (0, _object.set)(upgrade, "enabled", false);
+                  (0, _object.set)(upgrade, 'enabled', false);
                 }
 
                 return upgrade;
@@ -1005,7 +1047,7 @@
 
           break;
 
-        case "special":
+        case 'special':
           unit.specialRules.pushObject({
             desc: item.equipment,
             isUpgrade: true,
@@ -1014,13 +1056,13 @@
             cost: item.cost
           });
 
-          if (category.keyWord === "add") {
+          if (category.keyWord === 'add') {
             unit.upgrades.map(upgrade => {
               if (upgrade.choices === category.choices) {
                 let t = unit.specialRules.filter(special => item.equipment === special.desc);
 
                 if (t.length === category.count) {
-                  (0, _object.set)(upgrade, "enabled", false);
+                  (0, _object.set)(upgrade, 'enabled', false);
                 }
               }
 
@@ -1028,9 +1070,9 @@
             });
           }
 
-          if (category.keyWord === "addEach") {
-            let x = category.choices.findBy("equipment", item.equipment);
-            (0, _object.set)(x, "enabled", false);
+          if (category.keyWord === 'addEach') {
+            let x = category.choices.findBy('equipment', item.equipment);
+            (0, _object.set)(x, 'enabled', false);
             let bool = false;
             category.choices.forEach(choice => {
               if (choice.enabled) {
@@ -1041,7 +1083,7 @@
             if (!bool) {
               unit.upgrades.map(upgrade => {
                 if (upgrade.choices === category.choices) {
-                  (0, _object.set)(upgrade, "enabled", false);
+                  (0, _object.set)(upgrade, 'enabled', false);
                 }
 
                 return upgrade;
@@ -1062,18 +1104,18 @@
       let category = upgrade.originalLocation;
       unit.upgrades.map(upgrade => {
         if (upgrade.subCategory === category.subCategory) {
-          (0, _object.set)(upgrade, "enabled", true);
+          (0, _object.set)(upgrade, 'enabled', true);
         }
 
         return upgrade;
       });
 
       switch (upgrade.originalLocation.slot) {
-        case "equipment":
+        case 'equipment':
           unit.equipment.removeAt(unit.equipment.indexOf(upgrade));
           break;
 
-        case "special":
+        case 'special':
           unit.specialRules.removeAt(unit.specialRules.indexOf(upgrade));
           break;
 
@@ -1122,51 +1164,51 @@
       this.armyList.pushObject(unit);
       let increment = this.indexCounter;
       increment++;
-      (0, _object.set)(this, "indexCounter", increment);
-      (0, _object.set)(this.points, "remaining", this.points.remaining - unit.baseCost);
+      (0, _object.set)(this, 'indexCounter', increment);
+      (0, _object.set)(this.points, 'remaining', this.points.remaining - unit.baseCost);
       this.unitCostCheck();
     }
 
     removeUnit(unit) {
       let index = this.findUnitIndex(unit);
       let modifiedArmyList = this.armyList.removeAt(index);
-      (0, _object.set)(this, "armyList", modifiedArmyList);
-      (0, _object.set)(this.points, "remaining", this.points.remaining + unit.adjustedCost);
+      (0, _object.set)(this, 'armyList', modifiedArmyList);
+      (0, _object.set)(this.points, 'remaining', this.points.remaining + unit.adjustedCost);
       this.unitCostCheck();
     }
 
     cancelUpgradeUnit() {
-      (0, _object.set)(this, "selectedUnit", null);
-      (0, _object.set)(this, "armyListUnit", null);
-      (0, _object.set)(this, "tempPointsRemaining", null);
+      (0, _object.set)(this, 'selectedUnit', null);
+      (0, _object.set)(this, 'armyListUnit', null);
+      (0, _object.set)(this, 'tempPointsRemaining', null);
     }
 
     initUpgrade(unit) {
-      (0, _object.set)(this, "selectedUnit", JSON.parse(JSON.stringify(unit)));
-      (0, _object.set)(this, "armyListUnit", JSON.parse(JSON.stringify(unit)));
-      (0, _object.set)(this, "tempPointsRemaining", this.points.remaining);
+      (0, _object.set)(this, 'selectedUnit', JSON.parse(JSON.stringify(unit)));
+      (0, _object.set)(this, 'armyListUnit', JSON.parse(JSON.stringify(unit)));
+      (0, _object.set)(this, 'tempPointsRemaining', this.points.remaining);
     }
 
     selectUpgrade(category, upgrade) {
       let unit = this.selectedUnit;
 
       switch (category.keyWord) {
-        case "replace":
+        case 'replace':
           unit = this.replaceItem(category, upgrade, unit);
           unit.upgrades.map(upgrade => {
             if (upgrade.subCategory === category.subCategory) {
-              (0, _object.set)(upgrade, "enabled", false);
+              (0, _object.set)(upgrade, 'enabled', false);
             }
 
             return upgrade;
           });
           break;
 
-        case "add":
+        case 'add':
           unit = this.addItem(category, upgrade, unit);
           break;
 
-        case "addEach":
+        case 'addEach':
           unit = this.addItem(category, upgrade, unit);
           break;
 
@@ -1175,8 +1217,8 @@
       }
 
       unit.adjustedCost = unit.adjustedCost + upgrade.cost;
-      (0, _object.set)(this, "tempPointsRemaining", this.tempPointsRemaining - upgrade.cost);
-      (0, _object.set)(this, "selectedUnit", unit);
+      (0, _object.set)(this, 'tempPointsRemaining', this.tempPointsRemaining - upgrade.cost);
+      (0, _object.set)(this, 'selectedUnit', unit);
     }
 
     updateUnit() {
@@ -1185,40 +1227,40 @@
       let index = this.findUnitIndex(unit);
       let modifiedArmyList = this.armyList;
       modifiedArmyList[index] = unit;
-      (0, _object.set)(this, "armyList", modifiedArmyList);
-      (0, _object.set)(this, "selectedUnit", null);
-      (0, _object.set)(this, "armyListUnit", null);
-      (0, _object.set)(this.points, "remaining", this.tempPointsRemaining);
-      (0, _object.set)(this, "tempPointsRemaining", null);
+      (0, _object.set)(this, 'armyList', modifiedArmyList);
+      (0, _object.set)(this, 'selectedUnit', null);
+      (0, _object.set)(this, 'armyListUnit', null);
+      (0, _object.set)(this.points, 'remaining', this.tempPointsRemaining);
+      (0, _object.set)(this, 'tempPointsRemaining', null);
     }
 
     removeUpgrade(upgrade) {
       let controller = this;
       let unit = controller.selectedUnit;
 
-      if (upgrade.originalLocation.keyWord === "replace") {
-        if (upgrade.originalLocation.slot === "equipment") {
-          (0, _object.set)(unit.equipment[0], "enabled", true);
+      if (upgrade.originalLocation.keyWord === 'replace') {
+        if (upgrade.originalLocation.slot === 'equipment') {
+          (0, _object.set)(unit.equipment[0], 'enabled', true);
         }
 
-        if (upgrade.originalLocation.slot === "special") {
-          let special = unit.specialRules.findBy("desc", "Wizard(1)");
-          (0, _object.set)(special, "enabled", true);
+        if (upgrade.originalLocation.slot === 'special') {
+          let special = unit.specialRules.findBy('desc', 'Wizard(1)');
+          (0, _object.set)(special, 'enabled', true);
         }
       }
 
-      if (upgrade.originalLocation.keyWord === "addEach") {
+      if (upgrade.originalLocation.keyWord === 'addEach') {
         let x = unit.upgrades.find(unitUpgrade => unitUpgrade.choices[0].equipment === upgrade.originalLocation.choices[0].equipment);
         x.choices.map(choice => {
           if (choice.equipment === upgrade.desc) {
-            (0, _object.set)(choice, "enabled", true);
+            (0, _object.set)(choice, 'enabled', true);
           }
         });
       }
 
       controller.removeItem(upgrade, unit);
-      (0, _object.set)(unit, "adjustedCost", unit.adjustedCost - upgrade.cost);
-      (0, _object.set)(controller, "tempPointsRemaining", controller.tempPointsRemaining + upgrade.cost);
+      (0, _object.set)(unit, 'adjustedCost', unit.adjustedCost - upgrade.cost);
+      (0, _object.set)(controller, 'tempPointsRemaining', controller.tempPointsRemaining + upgrade.cost);
     }
 
   }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "points", [_tracking.tracked], {
@@ -1295,9 +1337,9 @@
       return null;
     }
   }), _applyDecoratedDescriptor(_class.prototype, "addUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "addUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "cancelUpgradeUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "cancelUpgradeUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "initUpgrade", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "initUpgrade"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "selectUpgrade", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "selectUpgrade"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "updateUnit", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "updateUnit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeUpgrade", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeUpgrade"), _class.prototype)), _class);
-  _exports.default = PointCalculatorController;
+  _exports.default = PointCalculatorsPointCalculatorController;
 });
-;define("army-builder/point-calculator/route", ["exports", "@ember/routing/route"], function (_exports, _route) {
+;define("army-builder/point-calculators/point-calculator/route", ["exports", "@ember/routing/route"], function (_exports, _route) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1305,11 +1347,10 @@
   });
   _exports.default = void 0;
 
-  class PointCalculatorRoute extends _route.default {
-    async model() {
-      const params = {
-        _id: 'beastmen'
-      };
+  class PointCalculatorsPointCalculatorRoute extends _route.default {
+    async model(params) {
+      // const params = { _id: 'beastmen' };
+      // const params = { _id: 'humans' };s
       let armyFile = await $.getJSON('/armies/' + params._id + '.json');
       let army = {
         name: params._id,
@@ -1324,7 +1365,7 @@
       army.units = army.units.map(unit => {
         if (unit.upgrades) {
           unit.upgrades = unit.upgrades.map(upgrade => {
-            let upgradeChoice = army.upgrades.findBy("category", upgrade);
+            let upgradeChoice = army.upgrades.findBy('category', upgrade);
             return upgradeChoice.options;
           });
         }
@@ -1336,9 +1377,9 @@
 
   }
 
-  _exports.default = PointCalculatorRoute;
+  _exports.default = PointCalculatorsPointCalculatorRoute;
 });
-;define("army-builder/point-calculator/template", ["exports", "@ember/template-factory"], function (_exports, _templateFactory) {
+;define("army-builder/point-calculators/point-calculator/template", ["exports", "@ember/template-factory"], function (_exports, _templateFactory) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -1347,9 +1388,38 @@
   _exports.default = void 0;
 
   var _default = (0, _templateFactory.createTemplateFactory)({
-    "id": "VC22CqBf",
-    "block": "[[[1,[28,[35,0],[\"PointCalculator\"],null]],[1,\"\\n\"],[10,0],[14,0,\"container text-center\"],[12],[1,\"\\n    \"],[10,\"h1\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"total\"]]],[1,\" Points Total\"],[13],[1,\"\\n    \"],[10,\"h3\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"remaining\"]]],[1,\" Points Remaining\"],[13],[1,\"\\n\"],[41,[30,0,[\"canAddUnit\"]],[[[1,\"    \"],[10,\"button\"],[14,0,\"btn primary-background primary-text\"],[14,\"data-bs-toggle\",\"modal\"],[14,\"data-bs-target\",\"#addUnitModal\"],[14,4,\"button\"],[12],[1,\"\\n        Add New Unit\\n    \"],[13],[1,\"\\n\"]],[]],null],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"modal fade\"],[14,1,\"addUnitModal\"],[14,\"tabindex\",\"-1\"],[14,\"data-bs-backdrop\",\"static\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-dialog modal-xl\"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n                \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                    \"],[10,\"h5\"],[14,0,\"modal-title\"],[12],[1,\"Add Unit\"],[13],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                    \"],[10,\"table\"],[14,0,\"table table-striped table-dark table-hover col-xs-12\"],[12],[1,\"\\n                        \"],[10,\"thead\"],[12],[1,\"\\n                            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                            \"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"model\",\"details\",\"units\"]]],null]],null],null,[[[41,[28,[37,4],[[30,1,[\"cost\"]],[30,0,[\"points\",\"remaining\"]]],null],[[[1,\"                            \"],[11,\"tr\"],[24,5,\"cursor: pointer;\"],[24,\"data-bs-dismiss\",\"modal\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"addUnit\"]],[30,1]],null]],null],[12],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"size\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"quality\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"defense\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,1,[\"equipment\"]]],null]],null],null,[[[10,0],[12],[1,[30,2]],[13]],[2]],null],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,1,[\"specialRules\"]]],null]],null],null,[[[1,\"\\n                                    \"],[10,1],[12],[1,[30,3]],[41,[51,[28,[37,8],[[30,3],[30,1,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\",\\n                                        \"]],[]],null],[13],[1,\"\\n\"]],[3]],null],[1,\"                                \"],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n                            \"],[13],[1,\"\\n\"]],[]],null]],[1]],null],[1,\"                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn btn-secondary primary-text\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[1,\"Cancel\"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\\n\\n\"],[41,[30,0,[\"armyList\",\"length\"]],[[[1,\"    \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-xs-12 \"],[14,5,\"margin-top:20px\"],[12],[1,\"\\n        \"],[10,\"thead\"],[12],[1,\"\\n            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Upgrades\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Remove\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"armyList\"]]],null]],null],null,[[[1,\"            \"],[10,\"tr\"],[12],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"name\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"size\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"quality\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"defense\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,4,[\"equipment\"]]],null]],null],null,[[[1,\"\\n\"],[41,[30,5,[\"enabled\"]],[[[1,\"                    \"],[10,0],[12],[1,[30,5,[\"desc\"]]],[13],[1,\"\\n\"]],[]],null]],[5]],null],[1,\"                \"],[13],[1,\"\\n\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,4,[\"specialRules\"]]],null]],null],null,[[[41,[30,6,[\"enabled\"]],[[[1,\"                    \"],[10,1],[12],[1,[30,6,[\"desc\"]]],[41,[51,[28,[37,8],[[30,6],[30,4,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\",\\n                        \"]],[]],null],[13],[1,\"\\n\"]],[]],null]],[6]],null],[1,\"                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[41,[28,[37,9],[[30,4,[\"upgrades\",\"length\"]],0],null],[[[1,\"                    \"],[11,1],[24,\"role\",\"button\"],[24,\"data-bs-toggle\",\"modal\"],[24,\"data-bs-target\",\"#upgradeModal\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"initUpgrade\"]],[30,4]],null]],null],[12],[1,\"Select Upgrades\"],[13],[1,\"\\n\"]],[]],[[[1,\"                    \"],[10,1],[12],[1,\"-\"],[13],[1,\"\\n\"]],[]]],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"adjustedCost\"]]],[1,\" Pts\"],[13],[1,\"\\n                \"],[11,\"td\"],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUnit\"]],[30,4]],null]],null],[12],[1,\"X\"],[13],[1,\"\\n            \"],[13],[1,\"\\n\"]],[4]],null],[1,\"        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"]],[]],null],[13],[1,\"\\n\\n\"],[1,\"\\n\"],[10,0],[14,0,\"modal fade\"],[14,1,\"upgradeModal\"],[14,\"tabindex\",\"-1\"],[14,\"data-bs-backdrop\",\"static\"],[12],[1,\"\\n    \"],[10,0],[14,0,\"modal-dialog modal-xl\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                \"],[10,\"h5\"],[14,0,\"modal-title\"],[12],[1,[30,0,[\"selectedUnit\",\"name\"]]],[1,\" Upgrades\"],[13],[1,\"\\n                \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,\"aria-label\",\"Close\"],[14,4,\"button\"],[12],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-md-12\"],[12],[1,\"\\n                    \"],[10,\"thead\"],[12],[1,\"\\n                        \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                    \"],[10,\"tbody\"],[12],[1,\"\\n                        \"],[10,\"tr\"],[12],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"name\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"size\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"quality\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"defense\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"equipment\"]]],null]],null],null,[[[1,\"\\n\"],[41,[30,7,[\"enabled\"]],[[[41,[30,7,[\"isUpgrade\"]],[[[1,\"                                \"],[10,0],[12],[1,[30,7,[\"desc\"]]],[1,\" \"],[11,1],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUpgrade\"]],[30,7]],null]],null],[12],[1,\"X\"],[13],[13],[1,\"\\n\"]],[]],[[[1,\"                                \"],[10,0],[12],[1,[30,7,[\"desc\"]]],[13],[1,\"\\n\"]],[]]]],[]],null]],[7]],null],[1,\"                            \"],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"specialRules\"]]],null]],null],null,[[[41,[30,8,[\"enabled\"]],[[[41,[30,8,[\"isUpgrade\"]],[[[1,\"                                \"],[10,0],[12],[1,[30,8,[\"desc\"]]],[1,\" \"],[11,1],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUpgrade\"]],[30,8]],null]],null],[12],[1,\"X\"],[13],[13],[1,\"\\n\"]],[]],[[[1,\"                                \"],[10,0],[12],[1,[30,8,[\"desc\"]]],[13],[1,\"\\n\"]],[]]]],[]],null]],[8]],null],[1,\"                            \"],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"adjustedCost\"]]],[1,\" Pts\"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"text-center container-fluid col-md-12\"],[12],[1,\"\\n                    \"],[10,0],[14,0,\"row\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"upgrades\"]]],null]],null],null,[[[1,\"                        \"],[10,0],[14,0,\"col-md-4\"],[12],[1,\"\\n                            \"],[10,\"h4\"],[12],[1,[30,9,[\"subCategory\"]]],[13],[1,\"\\n\"],[41,[30,9,[\"enabled\"]],[[[42,[28,[37,3],[[28,[37,3],[[30,9,[\"choices\"]]],null]],null],null,[[[41,[30,10,[\"enabled\"]],[[[41,[28,[37,4],[[30,10,[\"cost\"]],[30,0,[\"tempPointsRemaining\"]]],null],[[[1,\"                            \"],[11,0],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"selectUpgrade\"]],[30,9],[30,10]],null]],null],[12],[1,\"\\n                                \"],[1,[30,10,[\"equipment\"]]],[1,\"\\n                                \"],[1,[30,10,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n\"]],[]],null]],[]],null]],[10]],null]],[]],[[[1,\"                            \"],[10,1],[12],[1,\"Upgrade(s) already selected\"],[13],[1,\"\\n\"]],[]]],[1,\"                        \"],[13],[1,\"\\n\\n\"]],[9]],null],[1,\"                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                \"],[11,\"button\"],[24,0,\"btn btn-secondary\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"cancelUpgradeUnit\"]]],null]],null],[12],[1,\"Cancel\"],[13],[1,\"\\n                \"],[11,\"button\"],[24,0,\"btn btn-primary\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"updateUnit\"]]],null]],null],[12],[1,\"Update Unit\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13]],[\"unit\",\"equip\",\"specialRule\",\"armyUnit\",\"equip\",\"specialRule\",\"equip\",\"specialRule\",\"upgrade\",\"choice\"],false,[\"page-title\",\"if\",\"each\",\"-track-array\",\"lte\",\"on\",\"fn\",\"unless\",\"eq\",\"gt\"]]",
-    "moduleName": "army-builder/point-calculator/template.hbs",
+    "id": "oXZ7o72T",
+    "block": "[[[1,[28,[35,0],[\"Point Calculator\"],null]],[1,\"\\n\"],[10,0],[14,0,\"container text-center\"],[12],[1,\"\\n    \"],[10,\"h1\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"total\"]]],[1,\" Points Total\"],[13],[1,\"\\n    \"],[10,\"h3\"],[14,0,\"primary-text\"],[12],[1,[30,0,[\"points\",\"remaining\"]]],[1,\" Points Remaining\"],[13],[1,\"\\n\"],[41,[30,0,[\"canAddUnit\"]],[[[1,\"    \"],[10,\"button\"],[14,0,\"btn primary-background primary-text\"],[14,\"data-bs-toggle\",\"modal\"],[14,\"data-bs-target\",\"#addUnitModal\"],[14,4,\"button\"],[12],[1,\"\\n        Add New Unit\\n    \"],[13],[1,\"\\n\"]],[]],null],[1,\"\\n\"],[1,\"    \"],[10,0],[14,0,\"modal fade\"],[14,1,\"addUnitModal\"],[14,\"tabindex\",\"-1\"],[14,\"data-bs-backdrop\",\"static\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-dialog modal-xl\"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n                \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                    \"],[10,\"h5\"],[14,0,\"modal-title\"],[12],[1,\"Add Unit\"],[13],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                    \"],[10,\"table\"],[14,0,\"table table-striped table-dark table-hover col-xs-12\"],[12],[1,\"\\n                        \"],[10,\"thead\"],[12],[1,\"\\n                            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                            \"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"model\",\"details\",\"units\"]]],null]],null],null,[[[41,[28,[37,4],[[30,1,[\"cost\"]],[30,0,[\"points\",\"remaining\"]]],null],[[[1,\"                            \"],[11,\"tr\"],[24,5,\"cursor: pointer;\"],[24,\"data-bs-dismiss\",\"modal\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"addUnit\"]],[30,1]],null]],null],[12],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"size\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"quality\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"defense\"]]],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,1,[\"equipment\"]]],null]],null],null,[[[10,0],[12],[1,[30,2]],[13]],[2]],null],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,1,[\"specialRules\"]]],null]],null],null,[[[1,\"\\n                                    \"],[10,1],[12],[1,[30,3]],[41,[51,[28,[37,8],[[30,3],[30,1,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\",\\n                                        \"]],[]],null],[13],[1,\"\\n\"]],[3]],null],[1,\"                                \"],[13],[1,\"\\n                                \"],[10,\"td\"],[12],[1,[30,1,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n                            \"],[13],[1,\"\\n\"]],[]],null]],[1]],null],[1,\"                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                    \"],[10,\"button\"],[14,0,\"btn btn-secondary primary-text\"],[14,\"data-bs-dismiss\",\"modal\"],[14,4,\"button\"],[12],[1,\"Cancel\"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\\n\\n\"],[41,[30,0,[\"armyList\",\"length\"]],[[[1,\"    \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-xs-12 \"],[14,5,\"margin-top:20px\"],[12],[1,\"\\n        \"],[10,\"thead\"],[12],[1,\"\\n            \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Upgrades\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Remove\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n        \"],[10,\"tbody\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"armyList\"]]],null]],null],null,[[[1,\"            \"],[10,\"tr\"],[12],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"name\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"size\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"quality\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"defense\"]]],[13],[1,\"\\n                \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,4,[\"equipment\"]]],null]],null],null,[[[1,\"\\n\"],[41,[30,5,[\"enabled\"]],[[[1,\"                    \"],[10,0],[12],[1,[30,5,[\"desc\"]]],[13],[1,\"\\n\"]],[]],null]],[5]],null],[1,\"                \"],[13],[1,\"\\n\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,4,[\"specialRules\"]]],null]],null],null,[[[41,[30,6,[\"enabled\"]],[[[1,\"                    \"],[10,1],[12],[1,[30,6,[\"desc\"]]],[41,[51,[28,[37,8],[[30,6],[30,4,[\"specialRules\",\"lastObject\"]]],null]],[[[1,\",\\n                        \"]],[]],null],[13],[1,\"\\n\"]],[]],null]],[6]],null],[1,\"                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,\"\\n\"],[41,[28,[37,9],[[30,4,[\"upgrades\",\"length\"]],0],null],[[[1,\"                    \"],[11,1],[24,\"role\",\"button\"],[24,\"data-bs-toggle\",\"modal\"],[24,\"data-bs-target\",\"#upgradeModal\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"initUpgrade\"]],[30,4]],null]],null],[12],[1,\"Select Upgrades\"],[13],[1,\"\\n\"]],[]],[[[1,\"                    \"],[10,1],[12],[1,\"-\"],[13],[1,\"\\n\"]],[]]],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,\"td\"],[12],[1,[30,4,[\"adjustedCost\"]]],[1,\" Pts\"],[13],[1,\"\\n                \"],[11,\"td\"],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUnit\"]],[30,4]],null]],null],[12],[1,\"X\"],[13],[1,\"\\n            \"],[13],[1,\"\\n\"]],[4]],null],[1,\"        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"]],[]],null],[13],[1,\"\\n\\n\"],[1,\"\\n\"],[10,0],[14,0,\"modal fade\"],[14,1,\"upgradeModal\"],[14,\"tabindex\",\"-1\"],[14,\"data-bs-backdrop\",\"static\"],[12],[1,\"\\n    \"],[10,0],[14,0,\"modal-dialog modal-xl\"],[12],[1,\"\\n        \"],[10,0],[14,0,\"modal-content primary-background\"],[12],[1,\"\\n            \"],[10,0],[14,0,\"modal-header\"],[12],[1,\"\\n                \"],[10,\"h5\"],[14,0,\"modal-title\"],[12],[1,[30,0,[\"selectedUnit\",\"name\"]]],[1,\" Upgrades\"],[13],[1,\"\\n                \"],[10,\"button\"],[14,0,\"btn-close\"],[14,\"data-bs-dismiss\",\"modal\"],[14,\"aria-label\",\"Close\"],[14,4,\"button\"],[12],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,0,\"modal-body\"],[12],[1,\"\\n                \"],[10,\"table\"],[14,0,\"table table-striped table-dark col-md-12\"],[12],[1,\"\\n                    \"],[10,\"thead\"],[12],[1,\"\\n                        \"],[10,\"tr\"],[14,0,\"lead\"],[12],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Name\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Size\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Quality\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Defense\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Equipment\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Special Rules\"],[13],[1,\"\\n                            \"],[10,\"th\"],[14,\"scope\",\"col\"],[12],[1,\"Cost\"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                    \"],[10,\"tbody\"],[12],[1,\"\\n                        \"],[10,\"tr\"],[12],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"name\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"size\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"quality\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"defense\"]]],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"equipment\"]]],null]],null],null,[[[1,\"\\n\"],[41,[30,7,[\"enabled\"]],[[[41,[30,7,[\"isUpgrade\"]],[[[1,\"                                \"],[10,0],[12],[1,[30,7,[\"desc\"]]],[1,\" \"],[11,1],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUpgrade\"]],[30,7]],null]],null],[12],[1,\"X\"],[13],[13],[1,\"\\n\"]],[]],[[[1,\"                                \"],[10,0],[12],[1,[30,7,[\"desc\"]]],[13],[1,\"\\n\"]],[]]]],[]],null]],[7]],null],[1,\"                            \"],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"specialRules\"]]],null]],null],null,[[[41,[30,8,[\"enabled\"]],[[[41,[30,8,[\"isUpgrade\"]],[[[1,\"                                \"],[10,0],[12],[1,[30,8,[\"desc\"]]],[1,\" \"],[11,1],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"removeUpgrade\"]],[30,8]],null]],null],[12],[1,\"X\"],[13],[13],[1,\"\\n\"]],[]],[[[1,\"                                \"],[10,0],[12],[1,[30,8,[\"desc\"]]],[13],[1,\"\\n\"]],[]]]],[]],null]],[8]],null],[1,\"                            \"],[13],[1,\"\\n                            \"],[10,\"td\"],[12],[1,[30,0,[\"selectedUnit\",\"adjustedCost\"]]],[1,\" Pts\"],[13],[1,\"\\n                        \"],[13],[1,\"\\n                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n                \"],[10,0],[14,0,\"text-center container-fluid col-md-12\"],[12],[1,\"\\n                    \"],[10,0],[14,0,\"row\"],[12],[1,\"\\n\"],[42,[28,[37,3],[[28,[37,3],[[30,0,[\"selectedUnit\",\"upgrades\"]]],null]],null],null,[[[1,\"                        \"],[10,0],[14,0,\"col-md-4\"],[12],[1,\"\\n                            \"],[10,\"h4\"],[12],[1,[30,9,[\"subCategory\"]]],[13],[1,\"\\n\"],[41,[30,9,[\"enabled\"]],[[[42,[28,[37,3],[[28,[37,3],[[30,9,[\"choices\"]]],null]],null],null,[[[41,[30,10,[\"enabled\"]],[[[41,[28,[37,4],[[30,10,[\"cost\"]],[30,0,[\"tempPointsRemaining\"]]],null],[[[1,\"                            \"],[11,0],[24,\"role\",\"button\"],[4,[38,5],[\"click\",[28,[37,6],[[30,0,[\"selectUpgrade\"]],[30,9],[30,10]],null]],null],[12],[1,\"\\n                                \"],[1,[30,10,[\"equipment\"]]],[1,\"\\n                                \"],[1,[30,10,[\"cost\"]]],[1,\" Pts\"],[13],[1,\"\\n\"]],[]],null]],[]],null]],[10]],null]],[]],[[[1,\"                            \"],[10,1],[12],[1,\"Upgrade(s) already selected\"],[13],[1,\"\\n\"]],[]]],[1,\"                        \"],[13],[1,\"\\n\\n\"]],[9]],null],[1,\"                    \"],[13],[1,\"\\n                \"],[13],[1,\"\\n            \"],[13],[1,\"\\n            \"],[10,0],[14,0,\"modal-footer\"],[12],[1,\"\\n                \"],[11,\"button\"],[24,0,\"btn btn-secondary\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,5],[\"click\",[30,0,[\"cancelUpgradeUnit\"]]],null],[12],[1,\"Cancel\"],[13],[1,\"\\n                \"],[11,\"button\"],[24,0,\"btn btn-primary\"],[24,\"data-bs-dismiss\",\"modal\"],[24,4,\"button\"],[4,[38,5],[\"click\",[30,0,[\"updateUnit\"]]],null],[12],[1,\"Update Unit\"],[13],[1,\"\\n            \"],[13],[1,\"\\n        \"],[13],[1,\"\\n    \"],[13],[1,\"\\n\"],[13]],[\"unit\",\"equip\",\"specialRule\",\"armyUnit\",\"equip\",\"specialRule\",\"equip\",\"specialRule\",\"upgrade\",\"choice\"],false,[\"page-title\",\"if\",\"each\",\"-track-array\",\"lte\",\"on\",\"fn\",\"unless\",\"eq\",\"gt\"]]",
+    "moduleName": "army-builder/point-calculators/point-calculator/template.hbs",
+    "isStrictMode": false
+  });
+
+  _exports.default = _default;
+});
+;define("army-builder/point-calculators/route", ["exports", "@ember/routing/route"], function (_exports, _route) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class PointCalculatorsRoute extends _route.default {}
+
+  _exports.default = PointCalculatorsRoute;
+});
+;define("army-builder/point-calculators/template", ["exports", "@ember/template-factory"], function (_exports, _templateFactory) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = (0, _templateFactory.createTemplateFactory)({
+    "id": "/B6+pdeM",
+    "block": "[[[1,[28,[35,0],[\"PointCalculators\"],null]],[1,\"\\n\"],[46,[28,[37,2],null,null],null,null,null]],[],false,[\"page-title\",\"component\",\"-outlet\"]]",
+    "moduleName": "army-builder/point-calculators/template.hbs",
     "isStrictMode": false
   });
 
@@ -1383,7 +1453,11 @@
         path: '/:_id'
       }, function () {});
     });
-    this.route('point-calculator');
+    this.route('point-calculators', function () {
+      this.route('point-calculator', {
+        path: '/:_id'
+      }, function () {});
+    });
   });
 });
 ;define("army-builder/serializers/-default", ["exports", "@ember-data/serializer/json"], function (_exports, _json) {
@@ -1539,7 +1613,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("army-builder/app")["default"].create({"name":"army-builder","version":"0.0.0+751690db"});
+            require("army-builder/app")["default"].create({"name":"army-builder","version":"0.0.0+c1e89676"});
           }
         
 //# sourceMappingURL=army-builder.map

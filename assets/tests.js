@@ -214,25 +214,47 @@ define("army-builder/tests/unit/index/route-test", ["qunit", "ember-qunit"], fun
     });
   });
 });
-define("army-builder/tests/unit/point-calculator/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+define("army-builder/tests/unit/point-calculators/index/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
-  (0, _qunit.module)('Unit | Controller | point-calculator', function (hooks) {
+  (0, _qunit.module)('Unit | Route | point-calculators/index', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:point-calculators/index');
+      assert.ok(route);
+    });
+  });
+});
+define("army-builder/tests/unit/point-calculators/point-calculator/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Controller | point-calculators/point-calculator', function (hooks) {
     (0, _emberQunit.setupTest)(hooks); // TODO: Replace this with your real tests.
 
     (0, _qunit.test)('it exists', function (assert) {
-      let controller = this.owner.lookup('controller:point-calculator');
+      let controller = this.owner.lookup('controller:point-calculators/point-calculator');
       assert.ok(controller);
     });
   });
 });
-define("army-builder/tests/unit/point-calculator/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+define("army-builder/tests/unit/point-calculators/point-calculator/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
-  (0, _qunit.module)('Unit | Route | point-calculator', function (hooks) {
+  (0, _qunit.module)('Unit | Route | point-calculators/point-calculator', function (hooks) {
     (0, _emberQunit.setupTest)(hooks);
     (0, _qunit.test)('it exists', function (assert) {
-      let route = this.owner.lookup('route:point-calculator');
+      let route = this.owner.lookup('route:point-calculators/point-calculator');
+      assert.ok(route);
+    });
+  });
+});
+define("army-builder/tests/unit/point-calculators/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | point-calculators', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:point-calculators');
       assert.ok(route);
     });
   });
